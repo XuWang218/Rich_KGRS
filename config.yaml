@@ -1,0 +1,36 @@
+# model config
+embedding_size: 32
+# dataset config
+field_separator: "\t"
+seq_separator: " "
+USER_ID_FIELD: user_id
+ITEM_ID_FIELD: item_id
+RATING_FIELD: rating
+HEAD_ENTITY_ID_FIELD: head_id
+TAIL_ENTITY_ID_FIELD: tail_id
+RELATION_ID_FIELD: relation_id
+ENTITY_ID_FIELD: entity_id
+NEG_PREFIX: neg_
+LABEL_FIELD: label
+
+load_col:
+  inter: [user_id, item_id, rating]
+  kg: [head_id, relation_id, tail_id]
+  link: [item_id, entity_id]
+unused_col:
+  inter: [rating]
+lowest_val:
+  rating: 3
+# training settings
+epochs: 500
+train_batch_size: 4096
+learner: adam
+learning_rate: 0.001
+training_neg_sample_num: 1
+eval_step: 1
+stopping_step: 10
+# evalution settings
+eval_setting: RO_RS,full
+metrics: ["Recall", "MRR", "NDCG", "Hit", "Precision"]
+valid_metric: MRR@10
+eval_batch_size: 4096
