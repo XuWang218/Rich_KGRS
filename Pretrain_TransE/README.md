@@ -1,0 +1,1 @@
+Put all .ckpt files (downloaded from https://zenodo.org/records/11098754) here.
