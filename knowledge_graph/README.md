@@ -1,0 +1,1 @@
+Put all the `.ttl` here. They are the generated knowledge graphs based on ontologies. Download link: https://zenodo.org/records/11098754
