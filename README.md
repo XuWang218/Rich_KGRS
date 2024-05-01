@@ -2,6 +2,7 @@
 
 https://zenodo.org/records/11098754
 
+```
 .
 ├── knowledge_graph/
 │   ├── *.ttl
@@ -18,3 +19,4 @@ https://zenodo.org/records/11098754
 └── OpenKE/
     ├── *.ckpt
     └── ...
+```
