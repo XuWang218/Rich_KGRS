@@ -1,3 +1,6 @@
 [submodule "RecBole"]
 	path = RecBole
 	url = https://github.com/RUCAIBox/RecBole
+[submodule "OpenKE"]
+	path = OpenKE
+	url = https://github.com/thunlp/OpenKE.git
