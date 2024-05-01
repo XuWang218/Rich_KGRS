@@ -1,0 +1,109 @@
+@prefix mr: <http://ontology.tno.nl/movie-rating-ontology/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+####################
+#                  #
+#       USER       #
+#                  #
+####################
+
+
+mr:User a owl:Class ;
+    rdfs:label "User"@en .
+
+mr:providesRating a owl:ObjectProperty ;
+    rdfs:label "User provides Rating."@en;
+    rdfs:domain mr:User ;
+    rdfs:range mr:Rating.
+
+# User ID
+mr:hasUserID a owl:DatatypeProperty ;
+    rdfs:label "User has MovieLens User ID."@en;
+    rdfs:domain mr:User ;
+    rdfs:range xsd:string.
+
+# Zip-Code
+mr:hasZipcode a owl:DatatypeProperty ;
+    rdfs:label "User has Zipcode."@en;
+    rdfs:comment "This is integer only."@en;
+    rdfs:domain mr:User ;
+    rdfs:range xsd:string.
+
+# Gender
+mr:hasGender a owl:DatatypeProperty ;
+    rdfs:label "User has Gender, denoted by a M for male and F for female."@en;
+    rdfs:domain mr:User ;
+    rdfs:range xsd:string.
+
+# Age Range
+mr:hasAgeRange a owl:DatatypeProperty ;
+    rdfs:label "User has Age Range."@en;
+    rdfs:domain mr:User ;
+    rdfs:range xsd:string.
+
+# Occupation
+mr:hasOccupation a owl:DatatypeProperty ;
+    rdfs:label "User has Occupation."@en;
+    rdfs:domain mr:User ;
+    rdfs:range xsd:string.
+
+
+
+####################
+#                  #
+#      RATING      #
+#                  #
+####################
+
+
+mr:Rating a owl:Class ;
+    rdfs:label "Rating"@en .
+
+mr:providedByUser a owl:ObjectProperty ;
+    rdfs:label "User provides Rating."@en;
+    rdfs:domain mr:Rating ;
+    rdfs:range mr:User.    
+
+mr:isAboutMovie a owl:ObjectProperty ;
+    rdfs:label "Rating is about Movie."@en;
+    rdfs:domain mr:Rating ;
+    rdfs:range mr:Movie.
+
+mr:hasTimeStamp a owl:DatatypeProperty ;
+    rdfs:label "Rating has a Timestamp"@en ;
+    rdfs:domain mr:Rating;
+    rdfs:range xsd:string.
+
+mr:hasStars a owl:DatatypeProperty ;
+    rdfs:label "Rating has Amount of Stars"@en;
+    rdfs:domain mr:Rating ;
+    rdfs:range xsd:string.
+
+
+####################
+#                  #
+#       MOVIE      #
+#                  #
+####################
+
+mr:Movie a owl:Class ;
+    rdfs:label "Movie"@en .
+
+mr:hasRating a owl:ObjectProperty ;
+    rdfs:label "Movie has Rating."@en;
+    rdfs:domain mr:Movie ;
+    rdfs:range mr:Rating.
+
+mr:hasTitle a owl:DatatypeProperty ;
+    rdfs:label "Movie has a Title"@en;
+    rdfs:seeAlso "https://www.wikidata.org/wiki/Property:P1476"@en;
+    rdfs:domain mr:Movie ;
+    rdfs:range xsd:string .
+
+mr:hasGenre a owl:DatatypeProperty;
+    rdfs:label "Movie has one or multiple Genre(s)."@en;
+    rdfs:domain mr:Movie ;
+	rdfs:range xsd:string .

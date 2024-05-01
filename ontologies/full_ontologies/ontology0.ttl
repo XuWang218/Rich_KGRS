@@ -1,0 +1,57 @@
+@prefix mr: <http://ontology.tno.nl/movie-rating-ontology/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Base Movie Rating (mr) Ontology is about connecting the three concepts: User, Rating, Movie
+
+####################
+#                  #
+#       USER       #
+#                  #
+####################
+
+
+mr:User a owl:Class ;
+    rdfs:label "User"@en .
+
+mr:providesRating a owl:ObjectProperty ;
+    rdfs:label "User provides Rating."@en;
+    rdfs:domain mr:User ;
+    rdfs:range mr:Rating.
+
+
+####################
+#                  #
+#      RATING      #
+#                  #
+####################
+
+
+mr:Rating a owl:Class ;
+    rdfs:label "Rating"@en .
+
+mr:providedByUser a owl:ObjectProperty ;
+    rdfs:label "User provides Rating."@en;
+    rdfs:domain mr:Rating ;
+    rdfs:range mr:User.    
+
+mr:isAboutMovie a owl:ObjectProperty ;
+    rdfs:label "Rating is about Movie."@en;
+    rdfs:domain mr:Rating ;
+    rdfs:range mr:Movie.
+
+####################
+#                  #
+#       MOVIE      #
+#                  #
+####################
+
+mr:Movie a owl:Class ;
+    rdfs:label "Movie"@en .
+
+mr:hasRating a owl:ObjectProperty ;
+    rdfs:label "Movie has Rating."@en;
+    rdfs:domain mr:Movie ;
+    rdfs:range mr:Rating.
