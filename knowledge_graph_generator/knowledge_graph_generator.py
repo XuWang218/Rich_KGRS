@@ -34,94 +34,91 @@ with open('Mapping/rating.csv', 'r') as f:
         line = line.strip()
         line = line.split(',')
         rating_dict[line[0]] = line[1].replace('mr:','http://ontology.tno.nl/movie-ontology/')
-# gender_dict = {
-#     "M": "http://ontology.tno.nl/movie-ontology/Male",
-#     "F": "http://ontology.tno.nl/movie-ontology/Female"
-# }
+
 movielens_user_file = "ml-1m/users.dat"
 movielens_movie_file = "ml-1m/movies.dat"
 movielens_rating_file = "ml-1m/ratings.dat"
 
 # kg0
-# g0 = rdflib.Graph()
-# g0.bind("mr", mr)
-# g0.bind("rdf", rdf)
-# g0.bind("rdfs", rdfs)
-# g0.bind("owl", owl)
-# g0.bind("xsd", xsd)
-# g0.parse("ontologies/full_ontologies/ontology0.ttl", format="ttl")
+g0 = rdflib.Graph()
+g0.bind("mr", mr)
+g0.bind("rdf", rdf)
+g0.bind("rdfs", rdfs)
+g0.bind("owl", owl)
+g0.bind("xsd", xsd)
+g0.parse("ontologies/full_ontologies/ontology0.ttl", format="ttl")
 
-# with open(movielens_rating_file,'r') as f:
-#     for line in f:
-#         line = line.strip()
-#         line = line.split('::')
-#         user = rdflib.URIRef(mr+"User/"+line[0])
-#         movie = rdflib.URIRef(mr+"Movie/"+line[1])
-#         rating = rdflib.URIRef(mr+"Rating/"+line[0]+"_"+line[1])
-#         g0.add((user, rdf.type, mr.User))
-#         g0.add((movie, rdf.type, mr.Movie))
-#         g0.add((rating, rdf.type, mr.Rating))
-#         g0.add((user, mr.providesRating, rating))
-#         g0.add((movie, mr.hasRating, rating))
-#         g0.add((rating,mr.providedByUser,user))
-#         g0.add((rating,mr.isAboutMovie,movie))
-# g0.parse("ontologies/full_ontologies/ontology0.ttl", format="ttl")
-# g0.serialize("knowledge_graph/KG0.ttl", format="ttl")
-# g0.close()
+with open(movielens_rating_file,'r') as f:
+    for line in f:
+        line = line.strip()
+        line = line.split('::')
+        user = rdflib.URIRef(mr+"User/"+line[0])
+        movie = rdflib.URIRef(mr+"Movie/"+line[1])
+        rating = rdflib.URIRef(mr+"Rating/"+line[0]+"_"+line[1])
+        g0.add((user, rdf.type, mr.User))
+        g0.add((movie, rdf.type, mr.Movie))
+        g0.add((rating, rdf.type, mr.Rating))
+        g0.add((user, mr.providesRating, rating))
+        g0.add((movie, mr.hasRating, rating))
+        g0.add((rating,mr.providedByUser,user))
+        g0.add((rating,mr.isAboutMovie,movie))
+g0.parse("ontologies/full_ontologies/ontology0.ttl", format="ttl")
+g0.serialize("knowledge_graph/KG0.ttl", format="ttl")
+g0.close()
 
 # kg1
-# g1 = rdflib.Graph()
-# g1.bind("mr", mr)
-# g1.bind("rdf", rdf)
-# g1.bind("rdfs", rdfs)
-# g1.bind("owl", owl)
-# g1.bind("xsd", xsd)
-# g1.parse("ontologies/full_ontologies/ontology1.ttl", format="ttl")
+g1 = rdflib.Graph()
+g1.bind("mr", mr)
+g1.bind("rdf", rdf)
+g1.bind("rdfs", rdfs)
+g1.bind("owl", owl)
+g1.bind("xsd", xsd)
+g1.parse("ontologies/full_ontologies/ontology1.ttl", format="ttl")
 
-# for triple in g_wiki:
-#     if str(triple[1]) == "http://www.wikidata.org/prop/direct/P1476":
-#         movie = triple[0]
-#         g1.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
+for triple in g_wiki:
+    if str(triple[1]) == "http://www.wikidata.org/prop/direct/P1476":
+        movie = triple[0]
+        g1.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
 
-# with open(movielens_user_file,'r') as f:
-#     for line in f:
-#         line = line.strip()
-#         line = line.split('::')
-#         user = rdflib.URIRef(mr+"User/"+line[0])
-#         zipcode = rdflib.Literal(line[4], datatype=xsd.string)
-#         gender = rdflib.Literal(line[1], datatype=xsd.string)
-#         age = rdflib.Literal(line[2], datatype=xsd.string)
-#         occupation = rdflib.URIRef(mr+"Occupation/"+line[3])
-#         g1.add((user, rdf.type, mr.User))
-#         g1.add((user, mr.hasZipcode, zipcode))
-#         g1.add((user, mr.hasGender, gender))
-#         g1.add((user, mr.hasAgeRange, age))
-#         g1.add((user, mr.hasOccupation, occupation))
-# with open(movielens_movie_file,'r',encoding='latin-1') as f:
-#     for line in f:
-#         line = line.strip()
-#         line = line.split('::')
-#         movie = rdflib.URIRef(mr+"Movie/"+line[0])
-#         genre_list = line[2].split('|')
-#         g1.add((movie, rdf.type, mr.Movie))
-#         for genre in genre_list:
-#             g1.add((movie, mr.hasGenre, rdflib.Literal(genre, datatype=xsd.string)))
-# with open(movielens_rating_file,'r') as f:
-#     for line in f:
-#         line = line.strip()
-#         line = line.split('::')
-#         user = rdflib.URIRef(mr+"User/"+line[0])
-#         movie = rdflib.URIRef(mr+"Movie/"+line[1])
-#         rating = rdflib.URIRef(mr+"Rating/"+line[0]+"_"+line[1])
-#         g1.add((rating, mr.hasRatingValue, rdflib.Literal(line[2], datatype=xsd.string)))
-#         g1.add((rating, mr.hasTimestamp, rdflib.Literal(line[3], datatype=xsd.string)))
-#         g1.add((rating, rdf.type, mr.Rating))
-#         g1.add((rating, mr.providedByUser, user))
-#         g1.add((rating, mr.isAboutMovie, movie))
-#         g1.add((user, mr.providesRating, rating))
-#         g1.add((movie, mr.hasRating, rating))
-# g1.serialize("knowledge_graph/KG1.ttl", format="ttl")
-# g1.close()
+with open(movielens_user_file,'r') as f:
+    for line in f:
+        line = line.strip()
+        line = line.split('::')
+        user = rdflib.URIRef(mr+"User/"+line[0])
+        zipcode = rdflib.Literal(line[4], datatype=xsd.string)
+        gender = rdflib.Literal(line[1], datatype=xsd.string)
+        age = rdflib.Literal(line[2], datatype=xsd.string)
+        occupation = rdflib.URIRef(mr+"Occupation/"+line[3])
+        g1.add((user, rdf.type, mr.User))
+        g1.add((user, mr.hasZipcode, zipcode))
+        g1.add((user, mr.hasGender, gender))
+        g1.add((user, mr.hasAgeRange, age))
+        g1.add((user, mr.hasOccupation, occupation))
+with open(movielens_movie_file,'r',encoding='latin-1') as f:
+    for line in f:
+        line = line.strip()
+        line = line.split('::')
+        movie = rdflib.URIRef(mr+"Movie/"+line[0])
+        genre_list = line[2].split('|')
+        g1.add((movie, rdf.type, mr.Movie))
+        for genre in genre_list:
+            g1.add((movie, mr.hasGenre, rdflib.Literal(genre, datatype=xsd.string)))
+with open(movielens_rating_file,'r') as f:
+    for line in f:
+        line = line.strip()
+        line = line.split('::')
+        user = rdflib.URIRef(mr+"User/"+line[0])
+        movie = rdflib.URIRef(mr+"Movie/"+line[1])
+        rating = rdflib.URIRef(mr+"Rating/"+line[0]+"_"+line[1])
+        g1.add((rating, mr.hasRatingValue, rdflib.Literal(line[2], datatype=xsd.string)))
+        g1.add((rating, mr.hasTimestamp, rdflib.Literal(line[3], datatype=xsd.string)))
+        g1.add((rating, rdf.type, mr.Rating))
+        g1.add((rating, mr.providedByUser, user))
+        g1.add((rating, mr.isAboutMovie, movie))
+        g1.add((user, mr.providesRating, rating))
+        g1.add((movie, mr.hasRating, rating))
+g1.serialize("knowledge_graph/KG1.ttl", format="ttl")
+g1.close()
 
 # kg1+
 
@@ -207,239 +204,239 @@ def delete_score_data(g:rdflib.Graph, rating_dict):
     g.remove((rating_dict["4"], mr["StarScore"], rdflib.Literal("4", datatype=rdflib.XSD.integer)))
     g.remove((rating_dict["5"], mr["StarScore"], rdflib.Literal("5", datatype=rdflib.XSD.integer)))
 
-# g1_plus = rdflib.Graph()
-# g1_plus.bind("mr", mr)
-# g1_plus.bind("rdf", rdf)
-# g1_plus.bind("rdfs", rdfs)
-# g1_plus.bind("owl", owl)
-# g1_plus.bind("xsd", xsd)
-# g1_plus.parse("ontologies/full_ontologies/ontology1+.ttl", format="ttl")
+g1_plus = rdflib.Graph()
+g1_plus.bind("mr", mr)
+g1_plus.bind("rdf", rdf)
+g1_plus.bind("rdfs", rdfs)
+g1_plus.bind("owl", owl)
+g1_plus.bind("xsd", xsd)
+g1_plus.parse("ontologies/full_ontologies/ontology1+.ttl", format="ttl")
 
-# for triple in g_wiki:
-#     if str(triple[1]) == "http://www.wikidata.org/prop/direct/P1476":
-#         movie = triple[0]
-#         g1_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
+for triple in g_wiki:
+    if str(triple[1]) == "http://www.wikidata.org/prop/direct/P1476":
+        movie = triple[0]
+        g1_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
 
-# with open(movielens_user_file,'r') as f:
-#     for line in f:
-#         line = line.strip()
-#         line = line.split('::')
-#         user = rdflib.URIRef(mr+"User/"+line[0])
-#         zipcode = rdflib.Literal(line[4], datatype=xsd.string)
-#         gender = gender_dict[line[1]]
-#         age = age_dict[line[2]]
-#         occupation = occupation_dict[line[3]]
-#         g1_plus.add((user, rdf.type, mr.User))
-#         g1_plus.add((user, mr.hasZipcode, zipcode))
-#         g1_plus.add((user, mr.hasGender, gender))
-#         g1_plus.add((user, mr.hasAgeRange, age))
-#         g1_plus.add((user, mr.hasOccupation, occupation))
+with open(movielens_user_file,'r') as f:
+    for line in f:
+        line = line.strip()
+        line = line.split('::')
+        user = rdflib.URIRef(mr+"User/"+line[0])
+        zipcode = rdflib.Literal(line[4], datatype=xsd.string)
+        gender = gender_dict[line[1]]
+        age = age_dict[line[2]]
+        occupation = occupation_dict[line[3]]
+        g1_plus.add((user, rdf.type, mr.User))
+        g1_plus.add((user, mr.hasZipcode, zipcode))
+        g1_plus.add((user, mr.hasGender, gender))
+        g1_plus.add((user, mr.hasAgeRange, age))
+        g1_plus.add((user, mr.hasOccupation, occupation))
 
-# with open(movielens_movie_file,'r',encoding='latin-1') as f:
-#     for line in f:
-#         line = line.strip()
-#         line = line.split('::')
-#         movie = rdflib.URIRef(mr+"Movie/"+line[0])
-#         title = rdflib.Literal(line[1], datatype=xsd.string)
-#         genre_list = line[2].split('|')
-#         g1_plus.add((movie, rdf.type, mr.Movie))
-#         g1_plus.add((movie, mr.hasTitle, title))
-#         for genre in genre_list:
-#             g1_plus.add((movie, mr.hasGenre, genre_dict[genre]))
+with open(movielens_movie_file,'r',encoding='latin-1') as f:
+    for line in f:
+        line = line.strip()
+        line = line.split('::')
+        movie = rdflib.URIRef(mr+"Movie/"+line[0])
+        title = rdflib.Literal(line[1], datatype=xsd.string)
+        genre_list = line[2].split('|')
+        g1_plus.add((movie, rdf.type, mr.Movie))
+        g1_plus.add((movie, mr.hasTitle, title))
+        for genre in genre_list:
+            g1_plus.add((movie, mr.hasGenre, genre_dict[genre]))
 
-# with open(movielens_rating_file,'r') as f:
-#     for line in f:
-#         line = line.strip()
-#         line = line.split('::')
-#         user = rdflib.URIRef(mr+"User/"+line[0])
-#         movie = rdflib.URIRef(mr+"Movie/"+line[1])
-#         rating = rdflib.URIRef(mr+"Rating/"+line[0]+"_"+line[1])
-#         # g1.add((rating, mr.hasRatingValue, rdflib.Literal(line[2], datatype=xsd.string)))
-#         g1_plus.add((rating, mr.hasStars, rating_dict[line[2]]))
-#         g1_plus.add((rating, mr.hasTimestamp, rdflib.Literal(line[3], datatype=xsd.string)))
-#         g1_plus.add((rating, rdf.type, mr.Rating))
-#         g1_plus.add((rating, mr.providedByUser, user))
-#         g1_plus.add((rating, mr.isAboutMovie, movie))
-#         g1_plus.add((user, mr.providesRating, rating))
-#         g1_plus.add((movie, mr.hasRating, rating))
-# g1_plus.serialize("knowledge_graph/KG1+.ttl", format="ttl")
-# g1_plus.close()
+with open(movielens_rating_file,'r') as f:
+    for line in f:
+        line = line.strip()
+        line = line.split('::')
+        user = rdflib.URIRef(mr+"User/"+line[0])
+        movie = rdflib.URIRef(mr+"Movie/"+line[1])
+        rating = rdflib.URIRef(mr+"Rating/"+line[0]+"_"+line[1])
+        # g1.add((rating, mr.hasRatingValue, rdflib.Literal(line[2], datatype=xsd.string)))
+        g1_plus.add((rating, mr.hasStars, rating_dict[line[2]]))
+        g1_plus.add((rating, mr.hasTimestamp, rdflib.Literal(line[3], datatype=xsd.string)))
+        g1_plus.add((rating, rdf.type, mr.Rating))
+        g1_plus.add((rating, mr.providedByUser, user))
+        g1_plus.add((rating, mr.isAboutMovie, movie))
+        g1_plus.add((user, mr.providesRating, rating))
+        g1_plus.add((movie, mr.hasRating, rating))
+g1_plus.serialize("knowledge_graph/KG1+.ttl", format="ttl")
+g1_plus.close()
 
 # kg2
-# g2 = rdflib.Graph()
-# g2.bind("mr", mr)
-# g2.bind("rdf", rdf)
-# g2.bind("rdfs", rdfs)
-# g2.bind("owl", owl)
-# g2.bind("xsd", xsd)
-# g2.parse("knowledge_graph/movie_description.ttl", format="ttl")
-# g2.parse("ontologies/full_ontologies/ontology2.ttl", format="ttl")
+g2 = rdflib.Graph()
+g2.bind("mr", mr)
+g2.bind("rdf", rdf)
+g2.bind("rdfs", rdfs)
+g2.bind("owl", owl)
+g2.bind("xsd", xsd)
+g2.parse("knowledge_graph/movie_description.ttl", format="ttl")
+g2.parse("ontologies/full_ontologies/ontology2.ttl", format="ttl")
 
-# for triple in g_wiki:
-#     if str(triple[1]) == "http://www.wikidata.org/prop/direct/P1476":
-#         movie = triple[0]
-#         g2.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
-#     elif str(triple[1]) in alignment_dict.keys():
-#         if isinstance(triple[2], rdflib.URIRef):
-#             for subj, pred, obj in g_wiki.triples((triple[2], rdflib.RDFS.label, None)):
-#                 g2.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), obj))
-#         else:
-#             g2.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
+for triple in g_wiki:
+    if str(triple[1]) == "http://www.wikidata.org/prop/direct/P1476":
+        movie = triple[0]
+        g2.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
+    elif str(triple[1]) in alignment_dict.keys():
+        if isinstance(triple[2], rdflib.URIRef):
+            for subj, pred, obj in g_wiki.triples((triple[2], rdflib.RDFS.label, None)):
+                g2.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), obj))
+        else:
+            g2.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
 
-# with open(movielens_user_file,'r') as f:
-#     for line in f:
-#         line = line.strip()
-#         line = line.split('::')
-#         user = rdflib.URIRef(mr+"User/"+line[0])
-#         zipcode = rdflib.Literal(line[4], datatype=xsd.string)
-#         gender = gender_dict[line[1]]
-#         age = age_dict[line[2]]
-#         occupation = occupation_dict[line[3]]
-#         g2.add((user, rdf.type, mr.User))
-#         g2.add((user, mr.hasZipcode, zipcode))
-#         g2.add((user, mr.hasGender, gender))
-#         g2.add((user, mr.hasAgeRange, age))
-#         g2.add((user, mr.hasOccupation, occupation))
+with open(movielens_user_file,'r') as f:
+    for line in f:
+        line = line.strip()
+        line = line.split('::')
+        user = rdflib.URIRef(mr+"User/"+line[0])
+        zipcode = rdflib.Literal(line[4], datatype=xsd.string)
+        gender = gender_dict[line[1]]
+        age = age_dict[line[2]]
+        occupation = occupation_dict[line[3]]
+        g2.add((user, rdf.type, mr.User))
+        g2.add((user, mr.hasZipcode, zipcode))
+        g2.add((user, mr.hasGender, gender))
+        g2.add((user, mr.hasAgeRange, age))
+        g2.add((user, mr.hasOccupation, occupation))
 
-# with open(movielens_movie_file,'r',encoding='latin-1') as f:
-#     for line in f:
-#         line = line.strip()
-#         line = line.split('::')
-#         movie = rdflib.URIRef(mr+"Movie/"+line[0])
-#         title = rdflib.Literal(line[1], datatype=xsd.string)
-#         genre_list = line[2].split('|')
-#         g2.add((movie, rdf.type, mr.Movie))
-#         g2.add((movie, mr.hasTitle, title))
-#         for genre in genre_list:
-#             g2.add((movie, mr.hasGenre, genre_dict[genre]))
+with open(movielens_movie_file,'r',encoding='latin-1') as f:
+    for line in f:
+        line = line.strip()
+        line = line.split('::')
+        movie = rdflib.URIRef(mr+"Movie/"+line[0])
+        title = rdflib.Literal(line[1], datatype=xsd.string)
+        genre_list = line[2].split('|')
+        g2.add((movie, rdf.type, mr.Movie))
+        g2.add((movie, mr.hasTitle, title))
+        for genre in genre_list:
+            g2.add((movie, mr.hasGenre, genre_dict[genre]))
 
-# with open(movielens_rating_file,'r') as f:
-#     for line in f:
-#         line = line.strip()
-#         line = line.split('::')
-#         user = rdflib.URIRef(mr+"User/"+line[0])
-#         movie = rdflib.URIRef(mr+"Movie/"+line[1])
-#         rating = rdflib.URIRef(mr+"Rating/"+line[0]+"_"+line[1])
-#         g2.add((rating, mr.hasStars, rating_dict[line[2]]))
-#         g2.add((rating, mr.hasTimestamp, rdflib.Literal(line[3], datatype=xsd.string)))
-#         g2.add((rating, rdf.type, mr.Rating))
-#         g2.add((rating, mr.providedByUser, user))
-#         g2.add((rating, mr.isAboutMovie, movie))
-#         g2.add((user, mr.providesRating, rating))
-#         g2.add((movie, mr.hasRating, rating))
-# g2.serialize("knowledge_graph/KG2.ttl", format="ttl")
-# g2.close()
+with open(movielens_rating_file,'r') as f:
+    for line in f:
+        line = line.strip()
+        line = line.split('::')
+        user = rdflib.URIRef(mr+"User/"+line[0])
+        movie = rdflib.URIRef(mr+"Movie/"+line[1])
+        rating = rdflib.URIRef(mr+"Rating/"+line[0]+"_"+line[1])
+        g2.add((rating, mr.hasStars, rating_dict[line[2]]))
+        g2.add((rating, mr.hasTimestamp, rdflib.Literal(line[3], datatype=xsd.string)))
+        g2.add((rating, rdf.type, mr.Rating))
+        g2.add((rating, mr.providedByUser, user))
+        g2.add((rating, mr.isAboutMovie, movie))
+        g2.add((user, mr.providesRating, rating))
+        g2.add((movie, mr.hasRating, rating))
+g2.serialize("knowledge_graph/KG2.ttl", format="ttl")
+g2.close()
 
 # kg2+
-# g2_plus = rdflib.Graph()
-# g2_plus.bind("mr", mr)
-# g2_plus.bind("rdf", rdf)
-# g2_plus.bind("rdfs", rdfs)
-# g2_plus.bind("owl", owl)
-# g2_plus.bind("xsd", xsd)
-# g2_plus.parse("knowledge_graph/movie_description.ttl", format="ttl")
-# g2_plus.parse("ontologies/full_ontologies/ontology2+.ttl", format="ttl")
+g2_plus = rdflib.Graph()
+g2_plus.bind("mr", mr)
+g2_plus.bind("rdf", rdf)
+g2_plus.bind("rdfs", rdfs)
+g2_plus.bind("owl", owl)
+g2_plus.bind("xsd", xsd)
+g2_plus.parse("knowledge_graph/movie_description.ttl", format="ttl")
+g2_plus.parse("ontologies/full_ontologies/ontology2+.ttl", format="ttl")
 
-# for triple in g_wiki:
-#     if str(triple[1]) == "http://www.wikidata.org/prop/direct/P1476":
-#         movie = triple[0]
-#         g2_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
-#     elif str(triple[1]) == "http://www.wikidata.org/prop/direct/P161" or str(triple[1]) == "http://www.wikidata.org/prop/direct/P725":
-#         movie = triple[0]
-#         g2_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
-#         g2_plus.add((triple[2], rdf.type, mr.Actor))
-#         for subj, pred, obj in g_wiki.triples((triple[2], rdflib.RDFS.label, None)):
-#             g2_plus.add((triple[2], mr.hasName, obj))
-#     elif str(triple[1]) == "http://www.wikidata.org/prop/direct/P57":
-#         movie = triple[0]
-#         g2_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
-#         g2_plus.add((triple[2], rdf.type, mr.Director))
-#         for subj, pred, obj in g_wiki.triples((triple[2], rdflib.RDFS.label, None)):
-#             g2_plus.add((triple[2], mr.hasName, obj))
-#     elif str(triple[1]) == "http://www.wikidata.org/prop/direct/P58":
-#         movie = triple[0]
-#         g2_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
-#         g2_plus.add((triple[2], rdf.type, mr.Writer))
-#         for subj, pred, obj in g_wiki.triples((triple[2], rdflib.RDFS.label, None)):
-#             g2_plus.add((triple[2], mr.hasName, obj))
-#     elif str(triple[1]) == "http://www.wikidata.org/prop/direct/P272":
-#         movie = triple[0]
-#         g2_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
-#         g2_plus.add((triple[2], rdf.type, mr.Producer))
-#         for subj, pred, obj in g_wiki.triples((triple[2], rdflib.RDFS.label, None)):
-#             g2_plus.add((triple[2], mr.hasName, obj))
-#     elif str(triple[1]) in alignment_dict.keys():
-#         movie = triple[0]
-#         if isinstance(triple[2], rdflib.URIRef):
-#             for subj, pred, obj in g_wiki.triples((triple[2], rdflib.RDFS.label, None)):
-#                 g2_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), obj))
-#         else:
-#             g2_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
+for triple in g_wiki:
+    if str(triple[1]) == "http://www.wikidata.org/prop/direct/P1476":
+        movie = triple[0]
+        g2_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
+    elif str(triple[1]) == "http://www.wikidata.org/prop/direct/P161" or str(triple[1]) == "http://www.wikidata.org/prop/direct/P725":
+        movie = triple[0]
+        g2_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
+        g2_plus.add((triple[2], rdf.type, mr.Actor))
+        for subj, pred, obj in g_wiki.triples((triple[2], rdflib.RDFS.label, None)):
+            g2_plus.add((triple[2], mr.hasName, obj))
+    elif str(triple[1]) == "http://www.wikidata.org/prop/direct/P57":
+        movie = triple[0]
+        g2_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
+        g2_plus.add((triple[2], rdf.type, mr.Director))
+        for subj, pred, obj in g_wiki.triples((triple[2], rdflib.RDFS.label, None)):
+            g2_plus.add((triple[2], mr.hasName, obj))
+    elif str(triple[1]) == "http://www.wikidata.org/prop/direct/P58":
+        movie = triple[0]
+        g2_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
+        g2_plus.add((triple[2], rdf.type, mr.Writer))
+        for subj, pred, obj in g_wiki.triples((triple[2], rdflib.RDFS.label, None)):
+            g2_plus.add((triple[2], mr.hasName, obj))
+    elif str(triple[1]) == "http://www.wikidata.org/prop/direct/P272":
+        movie = triple[0]
+        g2_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
+        g2_plus.add((triple[2], rdf.type, mr.Producer))
+        for subj, pred, obj in g_wiki.triples((triple[2], rdflib.RDFS.label, None)):
+            g2_plus.add((triple[2], mr.hasName, obj))
+    elif str(triple[1]) in alignment_dict.keys():
+        movie = triple[0]
+        if isinstance(triple[2], rdflib.URIRef):
+            for subj, pred, obj in g_wiki.triples((triple[2], rdflib.RDFS.label, None)):
+                g2_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), obj))
+        else:
+            g2_plus.add((movie, rdflib.URIRef(alignment_dict[str(triple[1])]), triple[2]))
 
-# with open(movielens_user_file,'r') as f:
-#     for line in f:
-#         line = line.strip()
-#         line = line.split('::')
-#         user = rdflib.URIRef(mr+"User/"+line[0])
-#         zipcode = rdflib.Literal(line[4], datatype=xsd.string)
-#         gender = gender_dict[line[1]]
-#         age = age_dict[line[2]]
-#         occupation = occupation_dict[line[3]]
-#         g2_plus.add((user, rdf.type, mr.User))
-#         g2_plus.add((user, mr.hasZipcode, zipcode))
-#         g2_plus.add((user, mr.hasGender, gender))
-#         g2_plus.add((user, mr.hasAgeRange, age))
-#         g2_plus.add((user, mr.hasOccupation, occupation))
+with open(movielens_user_file,'r') as f:
+    for line in f:
+        line = line.strip()
+        line = line.split('::')
+        user = rdflib.URIRef(mr+"User/"+line[0])
+        zipcode = rdflib.Literal(line[4], datatype=xsd.string)
+        gender = gender_dict[line[1]]
+        age = age_dict[line[2]]
+        occupation = occupation_dict[line[3]]
+        g2_plus.add((user, rdf.type, mr.User))
+        g2_plus.add((user, mr.hasZipcode, zipcode))
+        g2_plus.add((user, mr.hasGender, gender))
+        g2_plus.add((user, mr.hasAgeRange, age))
+        g2_plus.add((user, mr.hasOccupation, occupation))
 
-# with open(movielens_movie_file,'r',encoding='latin-1') as f:
-#     for line in f:
-#         line = line.strip()
-#         line = line.split('::')
-#         movie = rdflib.URIRef(mr+"Movie/"+line[0])
-#         title = rdflib.Literal(line[1], datatype=xsd.string)
-#         genre_list = line[2].split('|')
-#         g2_plus.add((movie, rdf.type, mr.Movie))
-#         g2_plus.add((movie, mr.hasTitle, title))
-#         for genre in genre_list:
-#             g2_plus.add((movie, mr.hasGenre, genre_dict[genre]))
+with open(movielens_movie_file,'r',encoding='latin-1') as f:
+    for line in f:
+        line = line.strip()
+        line = line.split('::')
+        movie = rdflib.URIRef(mr+"Movie/"+line[0])
+        title = rdflib.Literal(line[1], datatype=xsd.string)
+        genre_list = line[2].split('|')
+        g2_plus.add((movie, rdf.type, mr.Movie))
+        g2_plus.add((movie, mr.hasTitle, title))
+        for genre in genre_list:
+            g2_plus.add((movie, mr.hasGenre, genre_dict[genre]))
 
-# with open(movielens_rating_file,'r') as f:
-#     for line in f:
-#         line = line.strip()
-#         line = line.split('::')
-#         user = rdflib.URIRef(mr+"User/"+line[0])
-#         movie = rdflib.URIRef(mr+"Movie/"+line[1])
-#         rating = rdflib.URIRef(mr+"Rating/"+line[0]+"_"+line[1])
-#         g2_plus.add((rating, mr.hasStars, rating_dict[line[2]]))
-#         g2_plus.add((rating, mr.hasTimestamp, rdflib.Literal(line[3], datatype=xsd.string)))
-#         g2_plus.add((rating, rdf.type, mr.Rating))
-#         g2_plus.add((rating, mr.providedByUser, user))
-#         g2_plus.add((rating, mr.isAboutMovie, movie))
-#         g2_plus.add((user, mr.providesRating, rating))
-#         g2_plus.add((movie, mr.hasRating, rating))
+with open(movielens_rating_file,'r') as f:
+    for line in f:
+        line = line.strip()
+        line = line.split('::')
+        user = rdflib.URIRef(mr+"User/"+line[0])
+        movie = rdflib.URIRef(mr+"Movie/"+line[1])
+        rating = rdflib.URIRef(mr+"Rating/"+line[0]+"_"+line[1])
+        g2_plus.add((rating, mr.hasStars, rating_dict[line[2]]))
+        g2_plus.add((rating, mr.hasTimestamp, rdflib.Literal(line[3], datatype=xsd.string)))
+        g2_plus.add((rating, rdf.type, mr.Rating))
+        g2_plus.add((rating, mr.providedByUser, user))
+        g2_plus.add((rating, mr.isAboutMovie, movie))
+        g2_plus.add((user, mr.providesRating, rating))
+        g2_plus.add((movie, mr.hasRating, rating))
 
-# worked_with_sparql = """
-# PREFIX mr: <http://anonymous.nl/movie-rating-ontology/>
-# PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-# PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-# PREFIX owl: <http://www.w3.org/2002/07/owl#>
-# PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-# PREFIX wdt: <http://www.wikidata.org/prop/direct/>
-# SELECT Distinct ?person1 ?person2
-# WHERE {
-#     ?movie ?relation1 ?person1 .
-#     ?movie ?relation2 ?person2 .
-#     Filter(?person1 != ?person2)
-#     Values ?relation1 {wdt:P161 wdt:P725 wdt:P272 wdt:P58 wdt:P57}
-#     Values ?relation2 {wdt:P161 wdt:P725 wdt:P272 wdt:P58 wdt:P57}
-# }
-# """
-# res = g_wiki.query(worked_with_sparql)
-# for row in res:
-#     g2_plus.add((row[0], mr.workedWith, row[1]))
-#     g2_plus.add((row[1], mr.workedWith, row[0]))
-# g2_plus.serialize("knowledge_graph/KG2+.ttl", format="ttl")
-# g2_plus.close()
+worked_with_sparql = """
+PREFIX mr: <http://anonymous.nl/movie-rating-ontology/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+SELECT Distinct ?person1 ?person2
+WHERE {
+    ?movie ?relation1 ?person1 .
+    ?movie ?relation2 ?person2 .
+    Filter(?person1 != ?person2)
+    Values ?relation1 {wdt:P161 wdt:P725 wdt:P272 wdt:P58 wdt:P57}
+    Values ?relation2 {wdt:P161 wdt:P725 wdt:P272 wdt:P58 wdt:P57}
+}
+"""
+res = g_wiki.query(worked_with_sparql)
+for row in res:
+    g2_plus.add((row[0], mr.workedWith, row[1]))
+    g2_plus.add((row[1], mr.workedWith, row[0]))
+g2_plus.serialize("knowledge_graph/KG2+.ttl", format="ttl")
+g2_plus.close()
 
 #kg3
 g3 = rdflib.Graph()
