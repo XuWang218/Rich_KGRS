@@ -2,7 +2,7 @@
 
 This is the code and data of experiments for paper "The Effect of Semantic Knowledge Graph Richness on Embedding Based Recommender Systems"
 
-The data could be downloaded via [https://zenodo.org/records/11099250](https://zenodo.org/records/11099250)
+The data could be downloaded via [https://zenodo.org/records/11102893](https://zenodo.org/records/11102893)
 
 
 Before running the experiemnts, you should to make sure put all the `*.ckpt` files and all the decompressed `exp*` folders into correct path as following:
