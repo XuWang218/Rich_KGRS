@@ -47,16 +47,11 @@ Conda is recommended as the python environment for experiments.
 ```
 conda create -n RichKGRS python=3.9
 conda activate RichKGRS
+git submodule update --init --recursive
 pip install -r RecBole/requirements.txt
 pip install -r requirements.txt
 mv config.yaml RecBole/
 mv bole_exp.py RecBole/
-```
-
-### Preprocess
-To clone RecBole and OpenKE
-```
-git submodule update --init --recursive
 ```
 
 ### Run
